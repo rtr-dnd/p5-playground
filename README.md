@@ -1,3 +1,24 @@
+## ENIAQ Next Template
+
+現場で使いやすい最小限のカスタマイズが施されたNext.jsのテンプレートリポジトリです。
+
+`create-next-app`では以下の設定を使っています。
+
+- Typescript
+- app directory
+- Tailwind CSS
+
+上記で生成されたコードに、以下の設定をしています。
+
+- ESlint/Prettierの設定：[GTS](https://github.com/google/gts)
+- SVGインポートの設定：[SVGR](https://react-svgr.com/docs/next/)
+
+今後以下の内容も含めたいと考えています。
+
+- スタイリングされたUIコンポーネントライブラリ（Mui, Radix, Headless UIのいずれか）
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
