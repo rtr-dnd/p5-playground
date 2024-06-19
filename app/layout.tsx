@@ -1,8 +1,17 @@
 import type {Metadata} from 'next';
-import {Inter} from 'next/font/google';
+import {Archivo, Noto_Sans_JP} from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({subsets: ['latin']});
+const archivo = Archivo({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-archivo',
+});
+const noto_sans_jp = Noto_Sans_JP({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-noto-sans-jp',
+});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={`${archivo.variable} ${noto_sans_jp.variable} font-sans`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
