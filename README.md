@@ -19,6 +19,10 @@
 
 ---
 
+使う際には文字列`eniaq-next-template`を希望のプロジェクト名に置換してください。
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
