@@ -10,7 +10,7 @@
 
 上記で生成されたコードに、以下の設定をしています。
 
-- ESlint/Prettierの設定：[GTS](https://github.com/google/gts)
+- ESlint/Prettierの設定：[GTS](https://github.com/google/gts), [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import/tree/main)
 - SVGインポートの設定：[SVGR](https://react-svgr.com/docs/next/)
 
 今後以下の内容も含めたいと考えています。
