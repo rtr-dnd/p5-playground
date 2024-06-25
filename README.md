@@ -17,9 +17,11 @@
 
 - スタイリングされたUIコンポーネントライブラリ（Mui, Radix, Headless UIのいずれか）
 
----
+## 使用手順
 
-使う際には文字列`next-template`を希望のプロジェクト名に置換してください。
+- 文字列`next-template`を希望のプロジェクト名に置換
+- `git remote set-url origin (新しいリポジトリのURL)`を実行
+- `git remote add template https://github.com/eniaq/next-template`を実行
 
 ---
 
