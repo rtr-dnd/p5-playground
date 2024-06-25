@@ -1,5 +1,6 @@
-import type {Metadata} from 'next';
 import {Archivo, Noto_Sans_JP} from 'next/font/google';
+
+import type {Metadata} from 'next';
 import './globals.css';
 
 const archivo = Archivo({

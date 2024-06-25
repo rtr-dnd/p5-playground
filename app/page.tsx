@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import CubeIcon from '@/public/cube.svg';
 
 export default function Home() {
