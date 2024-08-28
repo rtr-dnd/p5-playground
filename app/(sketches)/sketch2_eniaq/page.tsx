@@ -6,9 +6,8 @@ import {SketchProps, type Sketch} from '@p5-wrapper/react';
 
 import useWindowSize from '@/utils/useWindowSize';
 
-const bg = '#17253d';
-const fg = '#d5dae3';
-const fg_weak = '#d5dae360';
+const bg = '#F3F5F8';
+const fg = '#1B2026';
 
 type MySketchProps = SketchProps & {
   scrollY: React.MutableRefObject<number>;
@@ -19,7 +18,8 @@ type MySketchProps = SketchProps & {
 const sketch: Sketch<MySketchProps> = p5 => {
   const margin_x = 64;
   const margin_y = 64;
-  const str = 'HONGO DESIGN DAY';
+  const str = 'ENIAQ ';
+  // const str = 'TOWARDS PRODUCTIVE HUMANITY ';
   const grid_max_x = 28;
   const grid_max_y = 32;
   const brush_size = 24;
@@ -120,7 +120,7 @@ export default function Sketch() {
 
   return (
     <>
-      <div className="text-white absolute bottom-0 pb-4 left-1/2 -translate-x-1/2 text-xs opacity-30 archivo">
+      <div className="text-black absolute bottom-0 pb-4 left-1/2 -translate-x-1/2 text-xs opacity-30 archivo">
         DRAG / DOUBLE CLICK
       </div>
       {width !== 0 && height !== 0 && (
