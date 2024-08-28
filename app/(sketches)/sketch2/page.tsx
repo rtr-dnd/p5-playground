@@ -61,6 +61,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
   p5.draw = () => {
     p5.clear();
     p5.background(bg);
+    p5.fill('#ff0000');
     p5.textFont('Archivo');
     p5.textSize(12);
     p5.textAlign(p5.CENTER, p5.BOTTOM);
@@ -77,13 +78,9 @@ const sketch: Sketch<MySketchProps> = p5 => {
     for (let j = 0; j < y_count; j++) {
       for (let i = 0; i < x_count; i++) {
         const x =
-          x_count >= 2
-            ? margin_x + (i - 1) * x_size + x_size / 2
-            : p5.width / 2;
+          x_count >= 2 ? margin_x + i * x_size + x_size / 2 : p5.width / 2;
         const y =
-          y_count >= 2
-            ? margin_y + (j - 1) * y_size + y_size / 2
-            : p5.height / 2;
+          y_count >= 2 ? margin_y + j * y_size + y_size / 2 : p5.height / 2;
 
         // check if the mouse is over the text
         const d = p5.dist(p5.mouseX, p5.mouseY, x, y);
