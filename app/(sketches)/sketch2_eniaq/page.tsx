@@ -19,7 +19,6 @@ const sketch: Sketch<MySketchProps> = p5 => {
   const margin_x = 64;
   const margin_y = 64;
   const str = 'ENIAQ ';
-  // const str = 'TOWARDS PRODUCTIVE HUMANITY ';
   const grid_max_x = 28;
   const grid_max_y = 32;
   const brush_size = 24;

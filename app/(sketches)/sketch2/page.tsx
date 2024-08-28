@@ -19,7 +19,7 @@ type MySketchProps = SketchProps & {
 const sketch: Sketch<MySketchProps> = p5 => {
   const margin_x = 64;
   const margin_y = 64;
-  const str = 'HONGO DESIGN DAY';
+  const str = 'HONGO DESIGN DAY ';
   const grid_max_x = 28;
   const grid_max_y = 32;
   const brush_size = 24;
@@ -121,6 +121,7 @@ export default function Sketch() {
   return (
     <>
       <div className="text-white absolute bottom-0 pb-4 left-1/2 -translate-x-1/2 text-xs opacity-30 archivo">
+        {/* DRAG TO DRAW / DOUBLE CLICK TO CLEAR */}
         DRAG / DOUBLE CLICK
       </div>
       {width !== 0 && height !== 0 && (
