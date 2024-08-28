@@ -8,6 +8,7 @@ import useWindowSize from '@/utils/useWindowSize';
 
 const bg = '#17253d';
 const fg = '#d5dae3';
+const fg_weak = '#d5dae360';
 
 type MySketchProps = SketchProps & {
   scrollY: React.MutableRefObject<number>;
@@ -36,7 +37,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
 
   const margin_x = 90;
   const margin_y = 90;
-  const str = 'DESIGNING PLUS NINE ';
+  const str = 'HONGO DESIGN DAY ';
   const x_count = 32;
   const y_count = 24;
   const brush_size = 24;
@@ -51,10 +52,18 @@ const sketch: Sketch<MySketchProps> = p5 => {
   p5.draw = () => {
     p5.clear();
     p5.background(bg);
-    p5.fill(fg);
     p5.textFont('Archivo');
+    p5.textSize(12);
+    p5.textAlign(p5.CENTER, p5.BOTTOM);
+    p5.fill(fg_weak);
+    p5.text(
+      'DRAG TO DRAW / DOUBLE CLICK TO CLEAR',
+      p5.width / 2,
+      p5.height - 10
+    );
     p5.textSize(16);
     p5.textAlign(p5.CENTER, p5.CENTER);
+    p5.fill(fg);
 
     for (let j = 0; j < y_count; j++) {
       for (let i = 0; i < x_count; i++) {
