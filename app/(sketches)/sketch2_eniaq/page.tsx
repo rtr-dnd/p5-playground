@@ -13,12 +13,13 @@ type MySketchProps = SketchProps & {
   scrollY: React.MutableRefObject<number>;
   w: number;
   h: number;
+  text: string;
 };
 
 const sketch: Sketch<MySketchProps> = p5 => {
   const margin_x = 64;
   const margin_y = 64;
-  const str = 'ENIAQ ';
+  let str = 'ENIAQ ';
   const grid_max_x = 28;
   const grid_max_y = 32;
   const brush_size = 24;
@@ -54,6 +55,9 @@ const sketch: Sketch<MySketchProps> = p5 => {
     if (props.w !== p5.width || props.h !== p5.height) {
       p5.resizeCanvas(props.w, props.h);
       initGrid();
+    }
+    if (props.text !== str) {
+      str = props.text;
     }
   };
 
@@ -95,6 +99,7 @@ export default function Sketch() {
   const scrollSpeed = useRef(0);
   const lastScrollTop = useRef(0);
   const deltaTime = 30;
+  const [val, setVal] = useState('ENIAQ ');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -119,8 +124,15 @@ export default function Sketch() {
 
   return (
     <>
-      <div className="text-black absolute bottom-0 pb-4 left-1/2 -translate-x-1/2 text-xs opacity-30 archivo">
-        DRAG / DOUBLE CLICK
+      <div className="text-black absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 archivo flex justify-between items-center">
+        <div>DRAG / DOUBLE CLICK</div>
+        <div>
+          <input
+            className="bg-transparent border border-black px-1"
+            value={val}
+            onChange={e => setVal(e.target.value)}
+          />
+        </div>
       </div>
       {width !== 0 && height !== 0 && (
         <NextReactP5Wrapper
@@ -128,6 +140,7 @@ export default function Sketch() {
           scrollY={scrollSpeed}
           w={width}
           h={height}
+          text={val}
         />
       )}
     </>
