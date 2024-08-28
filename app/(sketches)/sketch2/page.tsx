@@ -17,32 +17,41 @@ type MySketchProps = SketchProps & {
 };
 
 const sketch: Sketch<MySketchProps> = p5 => {
-  // let progresses = createSequence(line_num); // values (0 ~ 1)
-  // let offsets = createZeros(line_num);
+  const margin_x = 64;
+  const margin_y = 64;
+  const str = 'HONGO DESIGN DAY ';
+  const grid_max_x = 28;
+  const grid_max_y = 32;
+  const brush_size = 24;
+
+  let x_count = 0;
+  let y_count = 0;
+  let x_size = 0;
+  let y_size = 0;
+  let status = [[0]];
+
+  const initGrid = () => {
+    const available_width = p5.width - margin_x * 2;
+    const available_height = p5.height - margin_y * 2;
+    x_count = Math.floor(available_width / grid_max_x);
+    y_count = Math.floor(available_height / grid_max_y);
+    x_size = available_width / x_count;
+    y_size = available_height / y_count;
+    status = createZeros(x_count).map(e => createZeros(y_count));
+  };
 
   p5.setup = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     p5.frameRate(60);
+    initGrid();
   };
 
-  let scroll_y: React.MutableRefObject<number>;
   p5.updateWithProps = (props: MySketchProps) => {
-    if (props.scrollY) {
-      scroll_y = props.scrollY;
-    }
     if (props.w !== p5.width || props.h !== p5.height) {
       p5.resizeCanvas(props.w, props.h);
+      initGrid();
     }
   };
-
-  const margin_x = 90;
-  const margin_y = 90;
-  const str = 'HONGO DESIGN DAY ';
-  const x_count = 32;
-  const y_count = 24;
-  const brush_size = 24;
-
-  let status = createZeros(x_count).map(e => createZeros(y_count));
 
   p5.doubleClicked = () => {
     status = createZeros(x_count).map(e => createZeros(y_count));
@@ -69,11 +78,11 @@ const sketch: Sketch<MySketchProps> = p5 => {
       for (let i = 0; i < x_count; i++) {
         const x =
           x_count >= 2
-            ? margin_x + i * ((p5.width - margin_x * 2) / (x_count - 1))
+            ? margin_x + (i - 1) * x_size + x_size / 2
             : p5.width / 2;
         const y =
           y_count >= 2
-            ? margin_y + j * ((p5.height - margin_y * 2) / (y_count - 1))
+            ? margin_y + (j - 1) * y_size + y_size / 2
             : p5.height / 2;
 
         // check if the mouse is over the text
