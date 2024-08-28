@@ -19,7 +19,7 @@ type MySketchProps = SketchProps & {
 const sketch: Sketch<MySketchProps> = p5 => {
   const margin_x = 64;
   const margin_y = 64;
-  const str = 'HONGO DESIGN DAY ';
+  const str = 'HONGO DESIGN DAY';
   const grid_max_x = 28;
   const grid_max_y = 32;
   const brush_size = 24;
@@ -38,6 +38,11 @@ const sketch: Sketch<MySketchProps> = p5 => {
     x_size = available_width / x_count;
     y_size = available_height / y_count;
     status = createZeros(x_count).map(e => createZeros(y_count));
+  };
+
+  let archivo: unknown;
+  p5.preload = () => {
+    archivo = p5.loadFont('/archivo.ttf');
   };
 
   p5.setup = () => {
@@ -62,15 +67,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
     p5.clear();
     p5.background(bg);
     p5.fill('#ff0000');
-    p5.textFont('Archivo');
-    p5.textSize(12);
-    p5.textAlign(p5.CENTER, p5.BOTTOM);
-    p5.fill(fg_weak);
-    p5.text(
-      'DRAG TO DRAW / DOUBLE CLICK TO CLEAR',
-      p5.width / 2,
-      p5.height - 10
-    );
+    p5.textFont(archivo);
     p5.textSize(16);
     p5.textAlign(p5.CENTER, p5.CENTER);
     p5.fill(fg);
@@ -124,7 +121,9 @@ export default function Sketch() {
 
   return (
     <>
-      <div className="absolute top-0">Archivo designing</div>
+      <div className="absolute bottom-0 pb-4 left-1/2 -translate-x-1/2 text-xs opacity-30 archivo">
+        DRAG / DOUBLE CLICK
+      </div>
       {width !== 0 && height !== 0 && (
         <NextReactP5Wrapper
           sketch={sketch}
