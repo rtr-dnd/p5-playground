@@ -124,6 +124,7 @@ export default function Sketch() {
 
   return (
     <>
+      <div className="absolute top-0">Archivo designing</div>
       {width !== 0 && height !== 0 && (
         <NextReactP5Wrapper
           sketch={sketch}
