@@ -124,7 +124,7 @@ export default function Sketch() {
   });
 
   return (
-    <>
+    <div className="touch-none">
       <div className="text-white absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 archivo flex justify-between items-center">
         <div>DRAG / DOUBLE CLICK</div>
         <div>
@@ -144,7 +144,7 @@ export default function Sketch() {
           text={val}
         />
       )}
-    </>
+    </div>
   );
 }
 
