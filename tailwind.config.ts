@@ -29,6 +29,10 @@ const config: Config = {
           'sans-serif',
         ],
       },
+      colors: {
+        eniaq_dark_grey: '#1B2026',
+        eniaq_light_grey: '#F3F5F8',
+      },
     },
   },
   plugins: [],

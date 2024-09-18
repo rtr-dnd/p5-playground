@@ -113,11 +113,11 @@ export default function Sketch() {
 
   return (
     <div className="touch-none">
-      <div className="text-black absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 flex justify-between items-center">
+      <div className="text-eniaq_dark_grey absolute bottom-0 left-0 right-0 p-4 text-xs opacity-40 flex justify-between items-center">
         <div>{msg}</div>
         <div>
           <input
-            className="bg-transparent border border-black px-1"
+            className="bg-transparent border border-eniaq_dark_grey px-1"
             value={val}
             onChange={e => setVal(e.target.value)}
           />
