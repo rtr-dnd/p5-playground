@@ -14,6 +14,7 @@ type MySketchProps = SketchProps & {
   w: number;
   h: number;
   text: string;
+  onClear: () => void;
 };
 
 const sketch: Sketch<MySketchProps> = p5 => {
@@ -29,6 +30,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
   let x_size = 0;
   let y_size = 0;
   let status = [[0]];
+  let onClear = () => {};
 
   const initGrid = () => {
     const available_width = p5.width - margin_x * 2;
@@ -59,10 +61,14 @@ const sketch: Sketch<MySketchProps> = p5 => {
     if (props.text !== str) {
       str = props.text;
     }
+    if (props.onClear !== onClear) {
+      onClear = props.onClear;
+    }
   };
 
   p5.doubleClicked = () => {
     status = createZeros(x_count).map(e => createZeros(y_count));
+    onClear();
     return;
   };
 
@@ -96,36 +102,19 @@ const sketch: Sketch<MySketchProps> = p5 => {
 
 export default function Sketch() {
   const [width, height] = useWindowSize();
-  const scrollSpeed = useRef(0);
-  const lastScrollTop = useRef(0);
-  const deltaTime = 30;
   const [val, setVal] = useState('ENIAQ ');
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentScrollTop = window.scrollY;
-
-      const deltaY = currentScrollTop - lastScrollTop.current;
-
-      // スクロールが発生している場合に速度を計算
-      if (deltaY !== 0) {
-        scrollSpeed.current = deltaY / deltaTime;
-      } else {
-        scrollSpeed.current = 0;
-      }
-
-      lastScrollTop.current = currentScrollTop;
-    }, deltaTime);
-
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  const DEFAULT_MSG = 'DRAG / DOUBLE CLICK';
+  const [msg, setMsg] = useState(DEFAULT_MSG);
+  const onClear = () => {
+    setMsg('CLEARED');
+    setTimeout(() => setMsg(DEFAULT_MSG), 1000);
+  };
 
   return (
     <>
-      <div className="text-black absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 archivo flex justify-between items-center">
-        <div>DRAG / DOUBLE CLICK</div>
+      <div className="text-black absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 flex justify-between items-center">
+        <div>{msg}</div>
         <div>
           <input
             className="bg-transparent border border-black px-1"
@@ -137,10 +126,10 @@ export default function Sketch() {
       {width !== 0 && height !== 0 && (
         <NextReactP5Wrapper
           sketch={sketch}
-          scrollY={scrollSpeed}
           w={width}
           h={height}
           text={val}
+          onClear={onClear}
         />
       )}
     </>

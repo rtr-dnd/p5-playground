@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NextReactP5Wrapper} from '@p5-wrapper/next';
 import {SketchProps, type Sketch} from '@p5-wrapper/react';
 
@@ -8,13 +8,13 @@ import useWindowSize from '@/utils/useWindowSize';
 
 const bg = '#17253d';
 const fg = '#d5dae3';
-const fg_weak = '#d5dae360';
 
 type MySketchProps = SketchProps & {
   scrollY: React.MutableRefObject<number>;
   w: number;
   h: number;
   text: string;
+  onClear: () => void;
 };
 
 const sketch: Sketch<MySketchProps> = p5 => {
@@ -30,6 +30,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
   let x_size = 0;
   let y_size = 0;
   let status = [[0]];
+  let onClear = () => {};
 
   const initGrid = () => {
     const available_width = p5.width - margin_x * 2;
@@ -60,10 +61,14 @@ const sketch: Sketch<MySketchProps> = p5 => {
     if (props.text !== str) {
       str = props.text;
     }
+    if (props.onClear !== onClear) {
+      onClear = props.onClear;
+    }
   };
 
   p5.doubleClicked = () => {
     status = createZeros(x_count).map(e => createZeros(y_count));
+    onClear();
     return;
   };
 
@@ -97,36 +102,19 @@ const sketch: Sketch<MySketchProps> = p5 => {
 
 export default function Sketch() {
   const [width, height] = useWindowSize();
-  const scrollSpeed = useRef(0);
-  const lastScrollTop = useRef(0);
-  const deltaTime = 30;
   const [val, setVal] = useState('HONGO DESIGN DAY ');
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentScrollTop = window.scrollY;
-
-      const deltaY = currentScrollTop - lastScrollTop.current;
-
-      // スクロールが発生している場合に速度を計算
-      if (deltaY !== 0) {
-        scrollSpeed.current = deltaY / deltaTime;
-      } else {
-        scrollSpeed.current = 0;
-      }
-
-      lastScrollTop.current = currentScrollTop;
-    }, deltaTime);
-
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  const DEFAULT_MSG = 'DRAG / DOUBLE CLICK';
+  const [msg, setMsg] = useState(DEFAULT_MSG);
+  const onClear = () => {
+    setMsg('CLEARED');
+    setTimeout(() => setMsg(DEFAULT_MSG), 1000);
+  };
 
   return (
     <>
-      <div className="text-white absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 archivo flex justify-between items-center">
-        <div>DRAG / DOUBLE CLICK</div>
+      <div className="text-white absolute bottom-0 left-0 right-0 p-4 text-xs opacity-30 flex justify-between items-center">
+        <div>{msg}</div>
         <div>
           <input
             className="bg-transparent border border-white px-1"
@@ -138,35 +126,16 @@ export default function Sketch() {
       {width !== 0 && height !== 0 && (
         <NextReactP5Wrapper
           sketch={sketch}
-          scrollY={scrollSpeed}
           w={width}
           h={height}
           text={val}
+          onClear={onClear}
         />
       )}
     </>
   );
 }
 
-const repulsive = (x: number, offset: number) => {
-  // x: -1 ~ 1, y: -1 ~ 1
-  const base = 2;
-  const coeff = 5;
-
-  const new_x = x - offset + 0.03;
-  return new_x === 0
-    ? 0
-    : new_x < 0
-      ? -(base ** (coeff * new_x))
-      : base ** (-coeff * new_x) * 0.8;
-};
-
-const createSequence = (length: number) => {
-  return Array.from(
-    {length: length},
-    (item, index) => 0 + index * (1 / length)
-  );
-};
 const createZeros = (length: number) => {
   return Array.from({length: length}, (item, index) => 0);
 };

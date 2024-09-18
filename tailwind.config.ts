@@ -22,6 +22,12 @@ const config: Config = {
           'system-ui',
           'sans-serif',
         ],
+        mono: [
+          'var(--font-ibm-plex-mono)',
+          'monospace',
+          'system-ui',
+          'sans-serif',
+        ],
       },
     },
   },

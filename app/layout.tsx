@@ -1,4 +1,4 @@
-import {Archivo, Noto_Sans_JP} from 'next/font/google';
+import {Archivo, IBM_Plex_Mono, Noto_Sans_JP} from 'next/font/google';
 
 import type {Metadata} from 'next';
 import './globals.css';
@@ -7,6 +7,12 @@ const archivo = Archivo({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-archivo',
+});
+const ibm_plex_mono = IBM_Plex_Mono({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-ibm-plex-mono',
 });
 const noto_sans_jp = Noto_Sans_JP({
   subsets: ['latin'],
@@ -27,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${archivo.variable} ${noto_sans_jp.variable} font-sans`}
+        className={`${archivo.variable} ${ibm_plex_mono.variable} ${noto_sans_jp.variable} font-sans`}
       >
         {children}
       </body>
