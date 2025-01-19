@@ -12,30 +12,30 @@ type MySketchProps = SketchProps & {
   h: number;
 };
 const sketch: Sketch<MySketchProps> = p5 => {
-  const margin_x = 32;
-  const margin_t = 120;
-  const margin_b = 64;
+  const margin_x = -64;
+  const margin_t = 160;
+  const margin_b = 100;
   const grid_max_x = 32;
   const grid_max_y = 32;
   const brush_size = 28;
 
-  const waveFrequency = 0.01;
-  const waveAmplitude = 20;
-  const spatialScale = 0.5;
+  const waveFrequency = 0.03;
+  const waveAmplitude = 15;
+  const spatialScale = 0.3;
   const sizeLerpFactor = 0.05;
   const posLerpFactor = 0.05;
   const circle_intermittence_1 = 29;
   const circle_intermittence_2 = 11;
 
-  // const bg = '#FFF2DF';
-  // const circle_color_1 = '#F5BE08';
-  // const circle_color_2 = '#EA5C15';
-  // const circle_color_3 = 'rgba(78, 73, 67, 0.2)';
+  const bg = '#FFF2DF';
+  const circle_color_1 = '#FFD752';
+  const circle_color_2 = '#FF8B5D';
+  const circle_color_3 = 'rgba(78, 73, 67, 0.2)';
 
-  const bg = '#1D2B3A';
-  const circle_color_1 = '#08F56B';
-  const circle_color_2 = '#24D3F7';
-  const circle_color_3 = '#031629';
+  // const bg = '#1D2B3A';
+  // const circle_color_1 = '#08F56B';
+  // const circle_color_2 = '#24D3F7';
+  // const circle_color_3 = '#031629';
 
   let x_count = 0;
   let y_count = 0;
@@ -166,7 +166,8 @@ const sketch: Sketch<MySketchProps> = p5 => {
         ];
 
         p5.fill(color);
-        p5.circle(cur_xy[0], cur_xy[1] + waveFactor, size);
+        // p5.circle(cur_xy[0], cur_xy[1] + waveFactor, size);
+        p5.circle(cur_xy[0], cur_xy[1], size);
         status[i][j] = cur_xy;
       }
     }
