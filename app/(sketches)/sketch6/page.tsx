@@ -3,8 +3,7 @@
 import React, {useEffect, useRef} from 'react';
 import {NextReactP5Wrapper} from '@p5-wrapper/next';
 import {SketchProps, type Sketch} from '@p5-wrapper/react';
-
-import useWindowSize from '@/utils/useWindowSize';
+import {useMeasure} from 'react-use';
 
 import starsRightData from './stars_right.csv';
 import starsLeftData from './stars_left.csv';
@@ -40,6 +39,9 @@ const parseCSV = (csvData: string): Point[] => {
 };
 
 const sketch: Sketch<MySketchProps> = p5 => {
+  let parentWidth = 400;
+  let parentHeight = 400;
+
   const color_bg = '#FFF2DF';
 
   const color_black = '#2A2A2A';
@@ -56,7 +58,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
   let target_radius_red: number;
   let target_radius_yellow: number;
 
-  const preferredScale = 1500;
+  const preferredScale = 1800;
   let scale: number;
 
   let starsRight: Point[] = [];
@@ -80,7 +82,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
   const spatialScale = 0.008;
 
   p5.setup = () => {
-    p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    p5.createCanvas(parentWidth, parentHeight);
     p5.frameRate(60);
 
     rotation = p5.random(-30, 30) * (Math.PI / 180);
@@ -149,9 +151,9 @@ const sketch: Sketch<MySketchProps> = p5 => {
   };
 
   p5.updateWithProps = (props: MySketchProps) => {
-    if (props.w !== p5.width || props.h !== p5.height) {
-      p5.resizeCanvas(props.w, props.h);
-    }
+    parentWidth = props.w;
+    parentHeight = props.h;
+    p5.resizeCanvas(parentWidth, parentHeight);
     starsRight = props.starsRight;
     starsLeft = props.starsLeft;
     sunstars = props.sunstars;
@@ -234,7 +236,9 @@ const sketch: Sketch<MySketchProps> = p5 => {
 };
 
 export default function Sketch() {
-  const [width, height] = useWindowSize();
+  // const [width, height] = useWindowSize();
+  const [ref, {width, height}] = useMeasure<HTMLDivElement>();
+
   const scrollSpeed = useRef(0);
   const lastScrollTop = useRef(0);
   const deltaTime = 30;
@@ -260,41 +264,27 @@ export default function Sketch() {
 
   return (
     <>
-      {width !== 0 && height !== 0 && (
-        <NextReactP5Wrapper
-          sketch={sketch}
-          scrollY={scrollSpeed}
-          w={width}
-          h={height}
-          starsRight={starsRight}
-          starsLeft={starsLeft}
-          sunstars={sunstars}
-          sunstartips={sunstartips}
-        />
-      )}
+      <div className="w-full h-screen bg-[#FFF2DF] flex-col">
+        <header className="px-6 py-6 flex justify-between">
+          <div className="text-lg">田中 太郎</div>
+          <div className="text-lg">JA / EN</div>
+        </header>
+        <div ref={ref} className="w-full h-[480px]">
+          {width !== 0 && height !== 0 && (
+            <NextReactP5Wrapper
+              sketch={sketch}
+              scrollY={scrollSpeed}
+              w={width}
+              h={height}
+              starsRight={starsRight}
+              starsLeft={starsLeft}
+              sunstars={sunstars}
+              sunstartips={sunstartips}
+            />
+          )}
+        </div>
+        <div className="flex-1"></div>
+      </div>
     </>
   );
 }
-
-const repulsive = (x: number, offset: number) => {
-  // x: -1 ~ 1, y: -1 ~ 1
-  const base = 2;
-  const coeff = 5;
-
-  const new_x = x - offset + 0.03;
-  return new_x === 0
-    ? 0
-    : new_x < 0
-      ? -(base ** (coeff * new_x))
-      : base ** (-coeff * new_x) * 0.8;
-};
-
-const createSequence = (length: number) => {
-  return Array.from(
-    {length: length},
-    (item, index) => 0 + index * (1 / length)
-  );
-};
-const createZeros = (length: number) => {
-  return Array.from({length: length}, (item, index) => 0);
-};
