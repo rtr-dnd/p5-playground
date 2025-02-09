@@ -54,12 +54,12 @@ const sketch: Sketch<MySketchProps> = p5 => {
   let radius_black = 0;
   let radius_red = 0;
   let radius_yellow = 0;
-  let target_radius_black: number;
-  let target_radius_red: number;
-  let target_radius_yellow: number;
+  let target_radius_black = 0;
+  let target_radius_red = 0;
+  let target_radius_yellow = 0;
 
-  const preferredScale = 1800;
-  let scale: number;
+  const preferredScale = 1200;
+  let scale = 0;
 
   let starsRight: Point[] = [];
   let starsLeft: Point[] = [];
@@ -170,9 +170,11 @@ const sketch: Sketch<MySketchProps> = p5 => {
     );
 
   p5.draw = () => {
-    p5.translate(p5.width / 2 + offsetX, p5.height / 2 + offsetY);
-    p5.rotate(rotation);
     p5.background(color_bg);
+
+    p5.translate(parentWidth / 2 + offsetX, parentHeight / 2 + offsetY);
+    p5.rotate(rotation);
+
     p5.noStroke();
 
     const elapsedSeconds = Math.floor(p5.millis() / 3000);
