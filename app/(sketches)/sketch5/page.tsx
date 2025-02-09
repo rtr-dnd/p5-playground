@@ -15,8 +15,8 @@ const sketch: Sketch<MySketchProps> = p5 => {
   const margin_x = -64;
   const margin_t = 160;
   const margin_b = 100;
-  const grid_max_x = 32;
-  const grid_max_y = 32;
+  const grid_max_x = 24;
+  const grid_max_y = 24;
   const brush_size = 28;
 
   const waveFrequency = 0.03;
@@ -54,7 +54,9 @@ const sketch: Sketch<MySketchProps> = p5 => {
     y_count = Math.floor(available_height / grid_max_y);
     x_size = available_width / x_count;
     y_size = available_height / y_count;
-    status = Array.from({length: x_count}, () => Array(y_count).fill([0, 0]));
+    status = Array.from({length: x_count}, () =>
+      Array.from({length: y_count}, () => [0, 0])
+    );
     initial_draw = true;
   };
 
@@ -145,7 +147,7 @@ const sketch: Sketch<MySketchProps> = p5 => {
         for (const attractor of attractors) {
           const dist = p5.dist(x, y, attractor.x, attractor.y);
           if (dist < 300 && dist > 0) {
-            const force = 1000 / dist ** 1.3;
+            const force = 800 / dist ** 1.3;
 
             const unitX = (x - attractor.x) / dist;
             const unitY = (y - attractor.y) / dist;
