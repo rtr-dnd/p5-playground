@@ -40,15 +40,112 @@ const parseCSV = (csvData: string): Point[] => {
 };
 
 const sketch: Sketch<MySketchProps> = p5 => {
-  const bg = '#FFF2DF';
+  const color_bg = '#FFF2DF';
+
+  const color_black = '#2A2A2A';
+  const color_red = '#FA5D1F';
+  const color_yellow = '#F8C347';
+
+  let radius_plot: number;
+
+  const radiusLerpFactor = 0.2;
+  let radius_black = 0;
+  let radius_red = 0;
+  let radius_yellow = 0;
+  let target_radius_black: number;
+  let target_radius_red: number;
+  let target_radius_yellow: number;
+
+  const preferredScale = 1500;
+  let scale: number;
+
   let starsRight: Point[] = [];
   let starsLeft: Point[] = [];
   let sunstars: Point[] = [];
   let sunstartips: Point[] = [];
 
+  // 点の配列をメンバー変数として保持
+  let blackPoints: Point[] = [];
+  let redPoints: Point[] = [];
+  let yellowPoints: Point[] = [];
+
+  // global random rotation/offset
+  let rotation: number;
+  let offsetX: number;
+  let offsetY: number;
+  let waveAngle: number;
+
+  const waveFrequency = 0.05;
+  const waveAmplitude = 3;
+  const spatialScale = 0.008;
+
   p5.setup = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     p5.frameRate(60);
+
+    rotation = p5.random(-30, 30) * (Math.PI / 180);
+    offsetX = p5.random(-50, 50);
+    offsetY = p5.random(-50, 50);
+    waveAngle = p5.random(0, 2 * Math.PI);
+  };
+
+  const calculatePoints = () => {
+    scale = preferredScale;
+    radius_plot = scale / 50;
+
+    // 点の配列を更新
+    blackPoints = [];
+    redPoints = [];
+    yellowPoints = [];
+
+    // starsRightの点を計算
+    starsRight.forEach(point => {
+      blackPoints.push({x: point.x * scale, y: point.y * scale});
+
+      for (let i = 0; i < 5; i++) {
+        const angle = i * ((2 * Math.PI) / 5);
+        redPoints.push({
+          x: point.x * scale + radius_plot * Math.cos(angle),
+          y: point.y * scale + radius_plot * Math.sin(angle),
+        });
+      }
+      for (let i = 0; i < 5; i++) {
+        const angle = i * ((2 * Math.PI) / 5) + Math.PI;
+        yellowPoints.push({
+          x: point.x * scale + radius_plot * Math.cos(angle),
+          y: point.y * scale + radius_plot * Math.sin(angle),
+        });
+      }
+    });
+
+    // starsLeftの点を計算
+    starsLeft.forEach(point => {
+      blackPoints.push({x: point.x * scale, y: point.y * scale});
+
+      for (let i = 0; i < 5; i++) {
+        const angle = i * ((2 * Math.PI) / 5) + Math.PI;
+        redPoints.push({
+          x: point.x * scale + radius_plot * Math.cos(angle),
+          y: point.y * scale + radius_plot * Math.sin(angle),
+        });
+      }
+      for (let i = 0; i < 5; i++) {
+        const angle = i * ((2 * Math.PI) / 5);
+        yellowPoints.push({
+          x: point.x * scale + radius_plot * Math.cos(angle),
+          y: point.y * scale + radius_plot * Math.sin(angle),
+        });
+      }
+    });
+
+    // sunstarsとsunstartipsの点を追加
+    sunstars.forEach(point => {
+      blackPoints.push({x: point.x * scale, y: point.y * scale});
+    });
+
+    sunstartips.forEach(point => {
+      yellowPoints.push({x: point.x * scale, y: point.y * scale});
+    });
   };
 
   p5.updateWithProps = (props: MySketchProps) => {
@@ -59,37 +156,79 @@ const sketch: Sketch<MySketchProps> = p5 => {
     starsLeft = props.starsLeft;
     sunstars = props.sunstars;
     sunstartips = props.sunstartips;
+    calculatePoints();
   };
 
+  const calculateWaveFactor = (x: number, y: number, offset: number) =>
+    waveAmplitude *
+    p5.sin(
+      waveFrequency * p5.frameCount -
+        (x * Math.cos(waveAngle) + y * Math.sin(waveAngle)) * spatialScale +
+        offset
+    );
+
   p5.draw = () => {
-    p5.background(bg);
+    p5.translate(p5.width / 2 + offsetX, p5.height / 2 + offsetY);
+    p5.rotate(rotation);
+    p5.background(color_bg);
     p5.noStroke();
 
-    const scale = p5.max(p5.width, p5.height) * 0.7;
-    p5.translate(p5.width / 2, p5.height / 2);
+    const elapsedSeconds = Math.floor(p5.millis() / 3000);
+    const colorIndex = elapsedSeconds % 3;
+    // const colorIndex = 1;
 
-    // 白い点を描画
-    p5.fill(255);
-    starsRight.forEach(point => {
-      p5.circle(point.x * scale, point.y * scale, 4);
+    switch (colorIndex) {
+      case 1:
+        target_radius_black = scale / 60;
+        target_radius_yellow = scale / 320;
+        target_radius_red = scale / 480;
+        break;
+      case 2:
+        target_radius_black = scale / 320;
+        target_radius_yellow = scale / 90;
+        target_radius_red = scale / 480;
+        break;
+      default:
+        target_radius_black = scale / 480;
+        target_radius_yellow = scale / 320;
+        target_radius_red = scale / 90;
+        break;
+    }
+
+    radius_black = p5.lerp(radius_black, target_radius_black, radiusLerpFactor);
+    radius_yellow = p5.lerp(
+      radius_yellow,
+      target_radius_yellow,
+      radiusLerpFactor
+    );
+    radius_red = p5.lerp(radius_red, target_radius_red, radiusLerpFactor);
+
+    // まとめて描画
+    p5.fill(color_black);
+    blackPoints.forEach(point => {
+      p5.circle(
+        point.x,
+        point.y + calculateWaveFactor(point.x, point.y, 0),
+        radius_black
+      );
     });
 
-    // 赤い点を描画
-    p5.fill(255, 0, 0);
-    starsLeft.forEach(point => {
-      p5.circle(point.x * scale, point.y * scale, 4);
+    p5.fill(color_red);
+    redPoints.forEach(point => {
+      p5.circle(
+        point.x,
+        point.y + calculateWaveFactor(point.x, point.y, 0.2),
+        radius_red
+      );
     });
 
-    // 黄色い点を描画
-    p5.fill(255, 255, 0);
-    sunstars.forEach(point => {
-      p5.circle(point.x * scale, point.y * scale, 4);
-    });
-
-    // 青い点を描画
-    p5.fill(0, 255, 255);
-    sunstartips.forEach(point => {
-      p5.circle(point.x * scale, point.y * scale, 4);
+    p5.fill(color_yellow);
+    yellowPoints.forEach(point => {
+      p5.circle(
+        point.x,
+        point.y + calculateWaveFactor(point.x, point.y, 0.4),
+        radius_yellow
+      );
     });
   };
 };
