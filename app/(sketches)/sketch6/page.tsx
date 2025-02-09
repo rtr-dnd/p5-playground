@@ -266,7 +266,7 @@ export default function Sketch() {
 
   return (
     <>
-      <div className="w-full h-screen bg-[#FFF2DF] flex-col">
+      <div className="w-full h-screen bg-[#FFF2DF] flex-col text-[#2A2A2A]">
         <header className="px-6 py-6 flex justify-between">
           <div className="text-lg">田中 太郎</div>
           <div className="text-lg">JA / EN</div>
