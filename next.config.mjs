@@ -20,6 +20,11 @@ const nextConfig = {
         resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
         use: ['@svgr/webpack'],
       },
+      // Add raw-loader for CSV files
+      {
+        test: /\.csv$/,
+        use: ['raw-loader']
+      }
     )
 
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
